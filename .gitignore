@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+outputs/*
+!outputs/.gitkeep
+.streamlit/secrets.toml
+_uploaded*
