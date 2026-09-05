@@ -1,6 +1,6 @@
 streamlit>=1.36
 ultralytics>=8.2
-opencv-python-headless>=4.9
+opencv-python-headless==4.10.0.84
 numpy>=1.26
 pandas>=2.2
 folium>=0.16
