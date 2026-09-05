@@ -79,7 +79,10 @@ def process(source, bundle, bus_id, output_dir, live_seconds=None, progress=None
             if not is_live and frame_idx>config.MAX_FILE_FRAMES:
                 out.notices.append(f"Stopped at {config.MAX_FILE_FRAMES} frames for safety.")
                 break
-            frame=resize_keep_aspect(frame,config.TARGET_MAX_DIM)
+            # Keep the original camera resolution so small/far vehicles are not lost.
+            # The local UrbanSense build used the full 1280x720 demo frames.
+            # This is important for small vehicle detections.
+            frame=frame
             h,w=frame.shape[:2]
             if writer is None:
                 writer=cv2.VideoWriter(str(raw),cv2.VideoWriter_fourcc(*"mp4v"),fps,(w,h))
@@ -90,11 +93,17 @@ def process(source, bundle, bus_id, output_dir, live_seconds=None, progress=None
             try:
                 r=bundle.yolo.track(
                     frame,persist=True,tracker="bytetrack.yaml",
-                    conf=config.YOLO_CONF,verbose=False
+                    conf=0.25,verbose=False
                 )[0]
                 if r.boxes is not None:
                     for box in r.boxes:
-                        cid=int(box.cls[0]); name=r.names.get(cid,str(cid)).lower()
+                        cid=int(box.cls[0]); # Use the model's class-name table directly; this is compatible with
+                        # Ultralytics versions where Results.names is not a dict.
+                        model_names = getattr(bundle.yolo, "names", {})
+                        if isinstance(model_names, dict):
+                            name = str(model_names.get(cid, str(cid))).lower()
+                        else:
+                            name = str(model_names[cid] if cid < len(model_names) else cid).lower()
                         conf=float(box.conf[0]); xy=list(map(int,box.xyxy[0].tolist()))
                         tid=int(box.id[0]) if box.id is not None else None
                         label=f"{name} {conf:.2f}"
@@ -141,7 +150,7 @@ def process(source, bundle, bus_id, output_dir, live_seconds=None, progress=None
             except Exception as e:
                 out.notices.append(f"Pedestrian heuristic issue: {e}")
 
-            if frame_idx % config.SPECIALIST_EVERY == 0:
+            if frame_idx % 15 == 0:
                 if bundle.pothole is not None:
                     try:
                         r=bundle.pothole.predict(frame,conf=config.POTHOLE_CONF,verbose=False)[0]
