@@ -14,44 +14,26 @@ import folium
 from folium.plugins import HeatMap
 from streamlit_folium import st_folium
 from ultralytics import YOLO
-
-def calculate_pedestrian_risk(people, vehicles):
-    # Simple geometric proximity rule used by the proven local prototype.
-    # It is a review flag, not a collision prediction.
-    for px1, py1, px2, py2 in people:
-        pcx, pcy = (px1 + px2) / 2, (py1 + py2) / 2
-        for vx1, vy1, vx2, vy2 in vehicles:
-            vcx, vcy = (vx1 + vx2) / 2, (vy1 + vy2) / 2
-            vdiag = max(1.0, math.hypot(vx2 - vx1, vy2 - vy1))
-            if math.hypot(pcx - vcx, pcy - vcy) / vdiag < 2.0:
-                return {"risk": True}
-    return {"risk": False}
+from pedestrian_risk import calculate_pedestrian_risk
 
 
 st.set_page_config(page_title="UrbanSense", page_icon="🚌", layout="wide")
 
-def model_path(filename):
-    candidates = [filename, os.path.join("models", filename)]
-    for path in candidates:
-        if os.path.exists(path):
-            return path
-    return filename
-
 @st.cache_resource
 def load_vehicle_model():
-    return YOLO(model_path("yolo26n.pt"))
+    return YOLO("yolo26n.pt")
 
 @st.cache_resource
 def load_pothole_model():
-    return YOLO(model_path("pothole_model.pt")) if os.path.exists(model_path("pothole_model.pt")) else None
+    return YOLO("pothole_model.pt")
 
 @st.cache_resource
 def load_sign_model():
-    return YOLO(model_path("traffic_sign_model.pt")) if os.path.exists(model_path("traffic_sign_model.pt")) else None
+    return YOLO("traffic_sign_model.pt") if os.path.exists("traffic_sign_model.pt") else None
 
 @st.cache_resource
 def load_plate_model():
-    return YOLO(model_path("license_plate_model.pt")) if os.path.exists(model_path("license_plate_model.pt")) else None
+    return YOLO("license_plate_model.pt") if os.path.exists("license_plate_model.pt") else None
 
 @st.cache_resource
 def load_ocr():
@@ -191,8 +173,8 @@ def run_analysis(video_path, latitude=None, longitude=None):
 
         # Dedicated road model runs periodically on actual camera frames.
         if frame_no % 5 == 0:
-            pr = pothole_model(frame, conf=.25, verbose=False)[0] if pothole_model is not None else None
-            n = len(pr.boxes) if pr is not None and pr.boxes is not None else 0
+            pr = pothole_model(frame, conf=.25, verbose=False)[0]
+            n = len(pr.boxes) if pr.boxes is not None else 0
             if n:
                 pothole_frames += n
                 cs = pr.boxes.conf.tolist(); strongest = max(cs) if cs else 0
@@ -270,10 +252,8 @@ st.markdown("### 🎥 Camera / CCTV Input")
 mode = st.radio("Video source", ["Use demo video", "Upload camera video"], horizontal=True)
 video = None
 if mode == "Use demo video":
-    demo_candidates = ["road_video.mp4", os.path.join("assets", "road_video.mp4")]
-    demo_video = next((p for p in demo_candidates if os.path.exists(p)), None)
-    if demo_video:
-        video = demo_video
+    if os.path.exists("road_video.mp4"):
+        video = "road_video.mp4"
         st.video(video)
     else:
         st.error("road_video.mp4 is not present.")
