@@ -403,9 +403,6 @@ if display_events:
 else:
     st.info("No action candidate.")
 
-st.subheader("🧩 SIH Capability Coverage")
-rows=analytics.coverage()
-st.dataframe(pd.DataFrame(rows,columns=["SIH requirement","Implementation","Status"]),use_container_width=True,hide_index=True)
 
 st.markdown("---")
 st.caption("UrbanSense SIH26124 • Prototype • REAL AI and VIDEO DERIVED outputs are separated from DEMO EXAMPLES and CANDIDATE heuristics.")
