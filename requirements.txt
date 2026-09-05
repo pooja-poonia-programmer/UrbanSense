@@ -6,9 +6,9 @@ pandas>=2.2
 folium>=0.16
 streamlit-folium>=0.21
 imageio-ffmpeg>=0.5
-huggingface_hub>=0.23
 easyocr>=1.7
 scipy>=1.13
 scikit-image>=0.23
 lazy-loader>=0.4
 tifffile>=2024.5
+lap==0.5.13
