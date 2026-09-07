@@ -1,51 +1,96 @@
-# UrbanSense — SIH26124
+# 🚀 UrbanSense
 
-AI-powered mobile urban intelligence using public-transport camera feeds.
+### AI-Powered Mobile Urban Intelligence Platform Using Public Transport Fleet
 
-## Pipeline
+[![Python](https://img.shields.io/badge/Python-3.13+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![YOLO](https://img.shields.io/badge/AI-YOLO-111111?logo=yolo&logoColor=white)](https://docs.ultralytics.com/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
+[![GitHub](https://img.shields.io/badge/Repository-GitHub-181717?logo=github&logoColor=white)](https://github.com/)
+[![Status](https://img.shields.io/badge/Status-Prototype-success)]()
 
-Camera → Edge AI → Detection & Tracking → Event Engine → GPS/GIS → City Action → Fleet Intelligence
+> **UrbanSense turns public buses into mobile AI sensing nodes that continuously transform road-camera footage into structured traffic, road-safety and urban-intelligence events.**
 
-## Modes
+🌐 **Live Demo:** [UrbanSense on Streamlit](https://urbansense.streamlit.app/)
 
-- **Presentation Demo Video:** real inference from the built-in road video plus clearly labelled demo scenarios for SIH capabilities not present in the short clip.
-- **Upload Video:** demo scenarios are disabled; dashboard reports only evidence derived from the uploaded video.
-- **Live Camera / RTSP / HTTP:** samples a live stream for a configurable window and produces the same event/dashboard pipeline.
+---
 
-## Real AI components
+# ✨ Overview
 
-- Ultralytics YOLO + ByteTrack for vehicle/person detection and tracking
-- Fine-tuned pothole detector
-- Traffic-sign detector
-- License-plate detector
-- EasyOCR when plate crops are readable
-- Video-derived density and hotspot analytics
+UrbanSense is an AI-powered urban intelligence prototype designed around a simple idea:
 
-## Candidate / prototype components
+> **Every public bus can become a moving sensor for the city.**
 
-Waterlogging, traffic-signal state, pedestrian proximity and abnormal motion use transparent heuristics/candidates. Missing-object deficiencies and hit-and-run require dedicated scene/temporal models for production.
+Public transport vehicles already travel through major roads and can carry cameras capable of continuously observing the surrounding environment. Instead of treating this footage only as passive video recordings, UrbanSense applies computer vision and edge-oriented event processing to convert observations into actionable urban intelligence.
 
-## GIS
+The prototype processes road-camera footage and provides:
 
-- No GPS
-- Fixed GPS
-- Route-assigned demo GIS with interpolated positions
+- 🚗 Vehicle detection and classification
+- 🚌 Bus, car and truck counting
+- 🎯 Temporary vehicle tracking using ByteTrack
+- 🛣️ Pothole and road-defect detection
+- 🚶 Pedestrian proximity/risk analysis
+- 🚦 Traffic and congestion intelligence
+- 🚧 Infrastructure-deficiency workflows
+- 💧 Waterlogging and road-hazard workflows
+- 🚨 Incident-intelligence workflows
+- 🔎 Number-plate detection and OCR workflow
+- 📋 Structured AI event generation
+- 📍 GPS/GIS-based event positioning
+- 🔥 Congestion heatmap visualization
+- 🚌 Fleet-level event aggregation
+- 📈 Route and bottleneck analytics
+- 📡 Edge-AI / bandwidth-minimization architecture
+- 🏛️ Recommended city actions
 
-The demo route is explicitly not actual camera GPS.
+UrbanSense is currently a **prototype for SIH26124**. Real AI/video-derived results are separated from prototype/demo scenarios wherever the available models cannot reliably establish a real-world event.
 
-## Run locally
+---
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-$env:OPENBLAS_NUM_THREADS="1"; $env:OMP_NUM_THREADS="1"; $env:MKL_NUM_THREADS="1"; streamlit run app.py
-```
+# 🎯 Problem Statement
 
-Missing specialist weights are downloaded automatically from their documented public model sources when possible.
+## Existing Problem
 
-## Important credibility rule
+Urban roads are dynamic environments containing:
 
-Demo examples are never mixed into uploaded-video/live-camera mode.
+- Vehicles
+- Pedestrians
+- Road defects
+- Traffic congestion
+- Waterlogging
+- Traffic signs
+- Missing or damaged infrastructure
+- Potential traffic incidents
 
-## Deployment
+Although public buses frequently travel through these roads and may have onboard cameras, the resulting footage is commonly treated primarily as recorded video rather than as a continuous source of machine-readable urban intelligence.
 
-The app is designed for Streamlit Community Cloud. For a production deployment, move large weights to a model registry/object store, add authentication, encrypted transport, signed events and secure evidence retention.
+## Limitations of Conventional Approaches
+
+Traditional monitoring can depend heavily on:
+
+- Fixed CCTV infrastructure
+- Manual video inspection
+- Citizen complaints
+- Periodic road surveys
+- Isolated traffic monitoring systems
+
+These approaches can make continuous, city-wide road observation difficult and can delay the conversion of visual observations into actionable information.
+
+## Proposed Solution
+
+UrbanSense introduces an **AI-powered mobile sensing architecture** where public buses act as moving observation platforms.
+
+```text
+Public Bus Camera
+       ↓
+Edge AI / Computer Vision
+       ↓
+Object Detection + Tracking
+       ↓
+Event Generation
+       ↓
+GPS / GIS Association
+       ↓
+Urban Intelligence Dashboard
+       ↓
+Recommended City Action
